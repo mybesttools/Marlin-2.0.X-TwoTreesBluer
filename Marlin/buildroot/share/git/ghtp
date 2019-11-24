@@ -6,7 +6,7 @@
 # Useful when switching environments, using public wifi, etc.
 #
 
-GH_SSH="git@github\.com:"
+GH_SSH="git{at}github\.com:"
 GH_HTTPS="https:\/\/github\.com\/"
 
 case "$1" in

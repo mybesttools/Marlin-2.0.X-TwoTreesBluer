@@ -7,7 +7,7 @@ from __future__ import division
 
 import argparse
 
-__author__ = "Ben Gamari <bgamari@gmail.com>"
+__author__ = "Ben Gamari <bgamari{at}gmail.com>"
 __copyright__ = "Copyright 2012, Ben Gamari"
 __license__ = "GPL"
 
