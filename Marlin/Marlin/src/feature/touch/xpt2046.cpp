@@ -43,20 +43,23 @@
 XPT2046 touch;
 extern int8_t encoderDiff;
 
-void XPT2046::init() {
-  SET_INPUT(TOUCH_MISO_PIN);
+
+void XPT2046::begin() {
+  SET_INPUT(TOUCH_MISO_PIN);	  	  
   SET_OUTPUT(TOUCH_MOSI_PIN);
-  SET_OUTPUT(TOUCH_SCK_PIN);
+  SET_OUTPUT(TOUCH_SCK_PIN);	  	  
   OUT_WRITE(TOUCH_CS_PIN, HIGH);
-
-  #if PIN_EXISTS(TOUCH_INT)
-    // Optional Pendrive interrupt pin
-    SET_INPUT(TOUCH_INT_PIN);
-  #endif
-
-  // Read once to enable pendrive status pin
-  getInTouch(XPT2046_X);
 }
+
+void XPT2046::end() {
+    SET_INPUT(TOUCH_MISO_PIN);	  
+    SET_INPUT(TOUCH_MOSI_PIN);	  
+    SET_INPUT(TOUCH_SCK_PIN);
+}
+
+void XPT2046::init() {
+ getInTouch(XPT2046_X);
+}	
 
 #include "../../lcd/ultralcd.h" // For EN_C bit mask
 
@@ -101,6 +104,7 @@ bool XPT2046::isTouched() {
 uint16_t XPT2046::getInTouch(const XPTCoordinate coordinate) {
   uint16_t data[3];
 
+  begin();
   OUT_WRITE(TOUCH_CS_PIN, LOW);
 
   const uint8_t coord = uint8_t(coordinate) | XPT2046_CONTROL | XPT2046_DFR_MODE;
@@ -122,7 +126,8 @@ uint16_t XPT2046::getInTouch(const XPTCoordinate coordinate) {
   }
 
   WRITE(TOUCH_CS_PIN, HIGH);
-
+  end();
+  
   uint16_t delta01 = _MAX(data[0], data[1]) - _MIN(data[0], data[1]),
            delta02 = _MAX(data[0], data[2]) - _MIN(data[0], data[2]),
            delta12 = _MAX(data[1], data[2]) - _MIN(data[1], data[2]);
